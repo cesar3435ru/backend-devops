@@ -13,8 +13,10 @@ return new class extends Migration
     {
         Schema::create('users', function (Blueprint $table) {
             $table->id();
-            $table->string('nue',8); //Numero unico de empleado
-            $table->string('email')->unique();
+            $table->string('nue',8)->unique(); //Numero unico de empleado
+            // $table->string('email')->unique();
+            $table->foreign('rol_id')->references('id')->on('roles');
+            $table->unsignedBigInteger('rol_id');
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->rememberToken();
