@@ -1,0 +1,20 @@
+1. Instalar jwt en laravel
+composer require tymon/jwt-auth
+
+2.  Config/app copiar esto
+'providers' => [
+
+    ...
+
+    Tymon\JWTAuth\Providers\LaravelServiceProvider::class,
+]
+3.
+despues aplico el comando para actualizar cambios
+php artisan vendor:publish --provider="Tymon\JWTAuth\Providers\LaravelServiceProvider"
+4.
+Te genera un token nuevo en el archivo .env
+php artisan jwt:secret
+5. Modifico el modelo de usuario con algunas funciones de JWT
+6.Modifico Config/auth
+7. Modifico config/corse a     'supports_credentials' => true,
+8.Configuro el middleware de Authenticate.php para que ya no use el token en las demas peticiones, lo lee automaticamente en las demas funciones sin necesidad de escribir el token como header y es una forma segura.
