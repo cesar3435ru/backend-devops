@@ -8,4 +8,24 @@ use Illuminate\Database\Eloquent\Model;
 class Agremiado extends Model
 {
     use HasFactory;
+    protected $fillable = ['id', 'a_paterno', 'a_materno', 'nombre', 'genero', 'nup', 'nue', 'rfc', 'nss', 'f_nacimiento', 'telefono', 'cuota'];
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    //Relacion de uno a muchos----un agremiado puede agregar muchas solicitudes
+    public function addSolicitud()
+    {
+        return $this->hasMany(Solicitude::class);
+    }
+
+    public function genero()
+    {
+        return $this->hasOne(Genero::class);
+    }
+    public function cuota()
+    {
+        return $this->hasOne(Cuota::class);
+    }
 }

@@ -13,6 +13,9 @@ return new class extends Migration
     {
         Schema::create('solicitudes', function (Blueprint $table) {
             $table->id();
+            $table->string('ruta_archivo');
+            $table->foreign('nue')->references('id')->on('users');
+            $table->unsignedBigInteger('nue');
             $table->timestamps();
         });
     }

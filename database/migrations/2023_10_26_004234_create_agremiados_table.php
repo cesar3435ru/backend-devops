@@ -13,6 +13,20 @@ return new class extends Migration
     {
         Schema::create('agremiados', function (Blueprint $table) {
             $table->id();
+            $table->string('a_paterno',40);
+            $table->string('a_materno',40);
+            $table->string('nombre',50);
+            $table->foreign('genero')->references('id')->on('generos');
+            $table->unsignedBigInteger('genero');
+            $table->string('nup',8); //Numero unico del patron
+            $table->foreign('nue')->references('id')->on('users');
+            $table->unsignedBigInteger('nue');
+            $table->string('rfc',13);
+            $table->string('nss',11);
+            $table->date('f_nacimiento');
+            $table->string('telefono',20); //+52 1 951 345 67 89
+            $table->foreign('cuota')->references('id')->on('cuotas');
+            $table->unsignedBigInteger('cuota');
             $table->timestamps();
         });
     }

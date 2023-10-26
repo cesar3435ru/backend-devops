@@ -8,4 +8,11 @@ use Illuminate\Database\Eloquent\Model;
 class Solicitude extends Model
 {
     use HasFactory;
+    protected $fillable = ['nue', 'ruta_archivo'];
+
+
+    public function agremiado()
+    {
+        return $this->belongsTo(Agremiado::class);
+    }
 }
