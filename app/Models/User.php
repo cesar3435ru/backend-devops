@@ -60,9 +60,9 @@ class User extends Authenticatable implements JWTSubject
         return $this->hasOne(Role::class);
     }
 
-       //Hay una relacion de uno a muchos para las registros de agremiados
-       public function addAgremiado()
-       {
-           return $this->hasMany(Agremiado::class);
-       }
+    //Hay una relacion de uno a  para las registros de agremiados
+    public function agremiado()
+    {
+        return $this->hasOne(Agremiado::class);
+    }
 }

@@ -1,7 +1,8 @@
 <?php
 
 use App\Http\Controllers\AuthController;
-use Illuminate\Http\Request;
+use App\Http\Controllers\UserController;
+use App\Http\Controllers\AgrController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -22,20 +23,41 @@ use Illuminate\Support\Facades\Route;
 Route::middleware(['onlyadmin'])->group(function () {
     // Define aquí las rutas que solo deben ser accesibles por administradores
     Route::controller(AuthController::class)->group(function () {
-        Route::post('login', 'login');
         Route::post('logout', 'logout');
-        Route::get('profile', 'userProfileInfo');
+        Route::get('profilead', 'userProfileInfo');
         Route::put('updateinfo', 'updateUser');
         Route::post('refresh', 'refresh');
-        Route::get('users', 'getUsers');
     });
+    Route::post('addadmin', [UserController::class, 'addAdmin']);
+    Route::post('addagr', [UserController::class, 'addAgremiado']);
+    Route::get('admins', [UserController::class, 'getAdmins']);
+    Route::get('agremiados', [UserController::class, 'getAgremiados']);
+    Route::get('u/{id}', [UserController::class, 'getUserById']);
+    Route::put('user/{id}', [UserController::class, 'editUser']);
+    Route::delete('borraru/{id}', [UserController::class, 'deleteUser']);
+
+    Route::post('addagremiado', [AgrController::class, 'addAgremiado']);
+    Route::get('agrs', [AgrController::class, 'getAgremiados']);
+    Route::put('agremiado/{id}', [AgrController::class, 'editAgremiado']);
+    Route::delete('bagremiado/{id}', [AgrController::class, 'deleteAgremiado']);
+
+
 });
 
-Route::middleware(['jwt.auth', 'onlyagremiado'])->group(function () {
+Route::middleware(['onlyagremiado'])->group(function () {
     // Define aquí las rutas que solo deben ser accesibles por administradores
+    // Route::post('profile', [AuthController::class, 'userProfileInfo']);
+    Route::controller(AuthController::class)->group(function () {
+        Route::post('logoutt', 'logout');
+        Route::get('profile', 'userProfileInfo');
+        Route::put('updateinfoo', 'updateUser');
+        Route::post('refreshh', 'refresh');
+    });
+
 });
 
 
 //Rutas publicas
-Route::post('register', [AuthController::class, 'registerUser']);
 Route::post('login', [AuthController::class, 'login']);
+Route::post('radmin', [UserController::class, 'addAdmin']);
+Route::post('ragre', [UserController::class, 'addAgre']);

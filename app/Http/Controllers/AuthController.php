@@ -17,38 +17,11 @@ use Symfony\Component\HttpFoundation\Cookie;
 class AuthController extends Controller
 {
 
-    public function getUsers()
-    {
-        return response()->json(User::all(), 200);
-    }
-
-
     public function __construct()
     {
-        $this->middleware('auth:api', ['except' => ['login', 'registerUser', 'users']]);
+        $this->middleware('auth:api', ['except' => ['login', 'users']]);
     }
 
-    public function registerUser(Request $request)
-    {
-        $validator = Validator::make($request->all(), [
-            'nue' => 'required|string|max:8',
-            'password' => 'required|string|min:10',
-            'rol_id' => 'required'
-        ]);
-        if ($validator->fails()) {
-            return response()->json($validator->errors()->toJson(), 400);
-        }
-
-        $user = User::create(array_merge(
-            $validator->validate(),
-            ['password' => bcrypt($request->password)]
-        ));
-
-        return response()->json([
-            'message' => '¡User created successfully!',
-            'user' => $user
-        ], 201);
-    }
 
     public function updateUser(Request $request)
     {

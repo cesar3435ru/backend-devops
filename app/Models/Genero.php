@@ -9,11 +9,10 @@ class Genero extends Model
 {
     use HasFactory;
     protected $fillable = ['id', 'genero'];
-
-
+    
     public function agremiado()
     {
-        return $this->belongsTo(Agremiado::class);
+        return $this->hasOne(Agremiado::class);
     }
 
 }

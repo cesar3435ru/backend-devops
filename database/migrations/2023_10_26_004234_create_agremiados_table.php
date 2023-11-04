@@ -21,10 +21,10 @@ return new class extends Migration
             $table->string('nup',8); //Numero unico del patron
             $table->foreign('nue')->references('id')->on('users');
             $table->unsignedBigInteger('nue');
-            $table->string('rfc',13);
-            $table->string('nss',11);
+            $table->string('rfc',13)->unique();
+            $table->string('nss',11)->unique();
             $table->date('f_nacimiento');
-            $table->string('telefono',20); //+52 1 951 345 67 89
+            $table->string('telefono',20)->unique(); //+52 1 951 345 67 89
             $table->foreign('cuota')->references('id')->on('cuotas');
             $table->unsignedBigInteger('cuota');
             $table->timestamps();

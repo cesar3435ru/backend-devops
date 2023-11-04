@@ -11,7 +11,7 @@ class Agremiado extends Model
     protected $fillable = ['id', 'a_paterno', 'a_materno', 'nombre', 'genero', 'nup', 'nue', 'rfc', 'nss', 'f_nacimiento', 'telefono', 'cuota'];
     public function user()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class,'nue');
     }
 
     //Relacion de uno a muchos----un agremiado puede agregar muchas solicitudes
@@ -22,10 +22,11 @@ class Agremiado extends Model
 
     public function genero()
     {
-        return $this->hasOne(Genero::class);
+        return $this->belongsTo(Genero::class, 'genero');
     }
+
     public function cuota()
     {
-        return $this->hasOne(Cuota::class);
+        return $this->belongsTo(Cuota::class, 'cuota'); // Asegúrate de usar el nombre correcto de la columna de la clave foránea
     }
 }
