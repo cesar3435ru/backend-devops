@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('nombre',50);
             $table->foreign('genero')->references('id')->on('generos');
             $table->unsignedBigInteger('genero');
-            $table->string('nup',8); //Numero unico del patron
+            $table->string('nup',10); //Numero unico del patron
             $table->foreign('nue')->references('id')->on('users');
             $table->unsignedBigInteger('nue');
             $table->string('rfc',13)->unique();

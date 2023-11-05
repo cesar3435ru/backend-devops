@@ -3,6 +3,7 @@
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\AgrController;
+use App\Http\Controllers\SolicitudController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -41,12 +42,11 @@ Route::middleware(['onlyadmin'])->group(function () {
     Route::put('agremiado/{id}', [AgrController::class, 'editAgremiado']);
     Route::delete('bagremiado/{id}', [AgrController::class, 'deleteAgremiado']);
 
-
+    Route::get('solis', [SolicitudController::class, 'getSolis']);
+    Route::get('solisporfecha', [SolicitudController::class, 'getSolisByFecha']);
 });
 
 Route::middleware(['onlyagremiado'])->group(function () {
-    // Define aquí las rutas que solo deben ser accesibles por administradores
-    // Route::post('profile', [AuthController::class, 'userProfileInfo']);
     Route::controller(AuthController::class)->group(function () {
         Route::post('logoutt', 'logout');
         Route::get('profile', 'userProfileInfo');
@@ -54,6 +54,9 @@ Route::middleware(['onlyagremiado'])->group(function () {
         Route::post('refreshh', 'refresh');
     });
 
+    Route::post('rsolicitud', [SolicitudController::class, 'addSoli']);
+    Route::get('solicitudes', [SolicitudController::class, 'getAllSolisByUser']);
+    Route::delete('soli/{id}', [SolicitudController::class, 'deleteSoliById']);
 });
 
 

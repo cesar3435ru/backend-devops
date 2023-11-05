@@ -2,63 +2,126 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Solicitude;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Validator;
 
 class SolicitudController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function __construct()
     {
-        //
+        $this->middleware('auth:api');
+    }
+    public function addSoli(Request $request)
+    {
+        if (!Auth::check()) {
+            return response()->json(['error' => 'No access baby'], 401);
+        }
+
+        $user = Auth::user();
+
+        $validator = Validator::make($request->all(), [
+            'ruta_archivo' => 'required|mimes:jpeg,png,pdf,doc,docx|max:2048',
+
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['errors' => $validator->errors()], 422);
+        }
+        $fileRoute = $request->file('ruta_archivo')->store('public/filedata');
+
+        $solicutud = Solicitude::create([
+            'ruta_archivo' => $fileRoute,
+            'nue' => $user->id
+        ]);
+        return response()->json(['solicitud' => $solicutud], 201);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
+
+    public function getAllSolisByUser()
     {
-        //
+        if (!Auth::check()) {
+            return response()->json(['error' => 'No access'], 401);
+        }
+
+        $user = Auth::user();
+
+
+        //It gets all tasks from the user who logged in 
+        $solicitudes = Solicitude::where('nue', $user->id)->get();
+
+        if (!$solicitudes) {
+            return response()->json(['error' => 'No solicitudes'], 404);
+        }
+
+        return response()->json(['solicitudes' => $solicitudes], 200);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
+
+    public function deleteSoliById($id)
     {
-        //
+        if (!Auth::check()) {
+            return response()->json(['error' => 'No access'], 401);
+        }
+
+        $user = Auth::user();
+
+        $solicitud = Solicitude::find($id);
+
+        if (!$solicitud) {
+            return response()->json(['error' => 'Solicitud not found in DB'], 404);
+        }
+
+        if ($solicitud->nue !== $user->id) {
+            return response()->json(['error' => 'Unauthorized! This solicitud does not belong you.'], 403);
+        }
+        Storage::delete($solicitud->ruta_archivo);
+        $solicitud->delete();
+
+        return response()->json(['message' => 'Solicitud deleted successfully...'], 200);
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
+
+
+    public function getSolis()
     {
-        //
+        $solicitudes = Solicitude::with('user')->get();
+
+        foreach ($solicitudes as $soli) {
+            $soli->ruta_archivo = asset(Storage::url($soli->ruta_archivo));
+        }
+        return response()->json($solicitudes, 200);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
+    public function getSolisByFecha(Request $request)
     {
-        //
-    }
+        $validator = Validator::make($request->all(), [
+            'start_date' => 'required|date_format:Y-m-d',
+            'end_date' => 'required|date_format:Y-m-d',
+        ]);
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        //
-    }
+        if ($validator->fails()) {
+            return response()->json(['errors' => $validator->errors()], 400);
+        }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
+        $startDate = $request->input('start_date');
+        $endDate = $request->input('end_date');
+
+        $query = Solicitude::with('user');
+
+        $query->whereBetween('created_at', [$startDate, $endDate]);
+
+        $solicitudes = $query->get();
+
+        foreach ($solicitudes as $soli) {
+            $soli->ruta_archivo = asset(Storage::url($soli->ruta_archivo));
+        }
+
+        return response()->json($solicitudes, 200);
     }
 }

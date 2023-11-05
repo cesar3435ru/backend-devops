@@ -11,8 +11,10 @@ class Solicitude extends Model
     protected $fillable = ['nue', 'ruta_archivo'];
 
 
-    public function agremiado()
+   
+    public function user()
     {
-        return $this->belongsTo(Agremiado::class);
+        return $this->belongsTo(User::class, 'nue');
     }
+    
 }

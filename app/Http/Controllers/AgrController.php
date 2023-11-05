@@ -21,7 +21,7 @@ class AgrController extends Controller
             'a_materno' => 'required|string|max:40',
             'nombre' => 'required|string|max:50',
             'genero' => 'required',
-            'nup' => 'required|string|max:8',
+            'nup' => 'required|string|max:10',
             'nue' => 'required|unique:agremiados,nue', // Verificar unicidad en la tabla 'agremiados'
             'rfc' => 'required|string|max:13|unique:agremiados,rfc',
             'nss' => 'required|string|max:11|unique:agremiados,nss',
