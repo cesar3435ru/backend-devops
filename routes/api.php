@@ -4,6 +4,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\AgrController;
 use App\Http\Controllers\SolicitudController;
+use App\Http\Controllers\IsAuthenticatedController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -44,12 +45,13 @@ Route::middleware(['onlyadmin'])->group(function () {
 
     Route::get('solis', [SolicitudController::class, 'getSolis']);
     Route::get('solisporfecha', [SolicitudController::class, 'getSolisByFecha']);
+
 });
 
 Route::middleware(['onlyagremiado'])->group(function () {
     Route::controller(AuthController::class)->group(function () {
         Route::post('logoutt', 'logout');
-        Route::get('profile', 'userProfileInfo');
+        Route::get('profileagr', 'userProfileInfo');
         Route::put('updateinfoo', 'updateUser');
         Route::post('refreshh', 'refresh');
     });
@@ -62,5 +64,7 @@ Route::middleware(['onlyagremiado'])->group(function () {
 
 //Rutas publicas
 Route::post('login', [AuthController::class, 'login']);
+Route::post('loginagr', [AuthController::class, 'login']);
+Route::get('status', [IsAuthenticatedController::class, 'checkAuthentication']);
 Route::post('radmin', [UserController::class, 'addAdmin']);
 Route::post('ragre', [UserController::class, 'addAgre']);
