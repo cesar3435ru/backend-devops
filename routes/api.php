@@ -5,6 +5,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\AgrController;
 use App\Http\Controllers\SolicitudController;
 use App\Http\Controllers\IsAuthenticatedController;
+use App\Http\Controllers\GeneroController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -31,12 +32,14 @@ Route::middleware(['onlyadmin'])->group(function () {
         Route::post('refresh', 'refresh');
     });
     Route::post('addadmin', [UserController::class, 'addAdmin']);
-    Route::post('addagr', [UserController::class, 'addAgremiado']);
+    Route::post('addagr', [UserController::class, 'addAgre']);
     Route::get('admins', [UserController::class, 'getAdmins']);
     Route::get('agremiados', [UserController::class, 'getAgremiados']);
     Route::get('u/{id}', [UserController::class, 'getUserById']);
     Route::put('user/{id}', [UserController::class, 'editUser']);
+    Route::put('agr/{id}', [UserController::class, 'editUser']);
     Route::delete('borraru/{id}', [UserController::class, 'deleteUser']);
+    Route::delete('borraragr/{id}', [UserController::class, 'deleteUser']);
 
     Route::post('addagremiado', [AgrController::class, 'addAgremiado']);
     Route::get('agrs', [AgrController::class, 'getAgremiados']);
@@ -45,6 +48,11 @@ Route::middleware(['onlyadmin'])->group(function () {
 
     Route::get('solis', [SolicitudController::class, 'getSolis']);
     Route::get('solisporfecha', [SolicitudController::class, 'getSolisByFecha']);
+
+    Route::get('generos', [GeneroController::class, 'getGeneros']);
+    Route::get('nues', [GeneroController::class, 'getAgremiadosNues']);
+    Route::get('cuotas', [GeneroController::class, 'getCuotas']);
+
 
 });
 
@@ -66,5 +74,5 @@ Route::middleware(['onlyagremiado'])->group(function () {
 Route::post('login', [AuthController::class, 'login']);
 Route::post('loginagr', [AuthController::class, 'login']);
 Route::get('status', [IsAuthenticatedController::class, 'checkAuthentication']);
-Route::post('radmin', [UserController::class, 'addAdmin']);
-Route::post('ragre', [UserController::class, 'addAgre']);
+// Route::post('radmin', [UserController::class, 'addAdmin']);
+// Route::post('ragre', [UserController::class, 'addAgre']);
