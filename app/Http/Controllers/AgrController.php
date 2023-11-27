@@ -101,4 +101,15 @@ class AgrController extends Controller
         $agremiado->delete();
         return response()->json(['message' => '¡Agr eliminado con éxito!'], 200);
     }
+
+    public function getAgremiadoById($id)
+    {
+        $ag = Agremiado::find($id);
+
+        if (!$ag) {
+            return response()->json(['message' => 'Agremiado no encontrado'], 404);
+        }
+
+        return response()->json($ag, 200);
+    }
 }

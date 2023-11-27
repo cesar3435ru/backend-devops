@@ -44,9 +44,12 @@ Route::middleware(['onlyadmin'])->group(function () {
     Route::post('addagremiado', [AgrController::class, 'addAgremiado']);
     Route::get('agrs', [AgrController::class, 'getAgremiados']);
     Route::put('agremiado/{id}', [AgrController::class, 'editAgremiado']);
+    Route::get('getagremiado/{id}', [AgrController::class, 'getAgremiadoById']);
     Route::delete('bagremiado/{id}', [AgrController::class, 'deleteAgremiado']);
 
     Route::get('solis', [SolicitudController::class, 'getSolis']);
+    Route::get('download/{id}', [SolicitudController::class, 'downloadFile'])->name('file.download');
+
     Route::get('solisporfecha', [SolicitudController::class, 'getSolisByFecha']);
 
     Route::get('generos', [GeneroController::class, 'getGeneros']);

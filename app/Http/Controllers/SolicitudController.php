@@ -98,6 +98,7 @@ class SolicitudController extends Controller
         return response()->json($solicitudes, 200);
     }
 
+
     public function getSolisByFecha(Request $request)
     {
         $validator = Validator::make($request->all(), [
@@ -123,5 +124,24 @@ class SolicitudController extends Controller
         }
 
         return response()->json($solicitudes, 200);
+    }
+
+
+
+    public function downloadFile($id)
+    {
+        $solicitud = Solicitude::find($id);
+
+        if (!$solicitud) {
+            return response()->json(['error' => 'Solicitud not found'], 404);
+        }
+
+        $rutaArchivo = storage_path('app/' . $solicitud->ruta_archivo);
+
+        if (!file_exists($rutaArchivo)) {
+            return response()->json(['error' => 'File not found'], 404);
+        }
+
+        return response()->download($rutaArchivo);
     }
 }
