@@ -111,7 +111,9 @@ class SolicitudController extends Controller
         }
 
         $startDate = $request->input('start_date');
-        $endDate = $request->input('end_date');
+        $endDate = date('Y-m-d', strtotime($request->input('end_date') . ' +1 day'));
+
+        // $endDate = $request->input('end_date');
 
         $query = Solicitude::with('user');
 
@@ -125,6 +127,36 @@ class SolicitudController extends Controller
 
         return response()->json($solicitudes, 200);
     }
+
+    //Recibo el formato dd-mm-yyyy
+    // public function getSolisByFecha(Request $request)
+    // {
+    //     $validator = Validator::make($request->all(), [
+    //         'start_date' => 'required|date_format:d-m-Y',
+    //         'end_date' => 'required|date_format:d-m-Y',
+    //     ]);
+
+    //     if ($validator->fails()) {
+    //         return response()->json(['errors' => $validator->errors()], 400);
+    //     }
+
+    //     // Obtener las fechas y reformatearlas
+    //     $startDate = \DateTime::createFromFormat('d-m-Y', $request->input('start_date'))->format('Y-m-d');
+    //     $endDate = \DateTime::createFromFormat('d-m-Y', $request->input('end_date'))->format('Y-m-d');
+
+    //     $query = Solicitude::with('user');
+
+    //     $query->whereBetween('created_at', [$startDate, $endDate]);
+
+    //     $solicitudes = $query->get();
+
+    //     foreach ($solicitudes as $soli) {
+    //         $soli->ruta_archivo = asset(Storage::url($soli->ruta_archivo));
+    //     }
+
+    //     return response()->json($solicitudes, 200);
+    // }
+
 
 
 
